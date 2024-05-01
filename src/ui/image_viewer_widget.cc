@@ -333,17 +333,32 @@ DatabaseImageViewerWidget::DatabaseImageViewerWidget(
   button_layout_->addWidget(delete_button_);
   connect(delete_button_, &QPushButton::released, this,
           &DatabaseImageViewerWidget::DeleteImage);
+
+  prev_button_ = new QPushButton(tr("Prev"), this);
+  prev_button_->setFont(font);
+  button_layout_->addWidget(prev_button_);
+  connect(prev_button_, &QPushButton::released, this,
+          &DatabaseImageViewerWidget::ShowPrevImage);
+
+  next_button_ = new QPushButton(tr("Next"), this);
+  next_button_->setFont(font);
+  button_layout_->addWidget(next_button_);
+  connect(next_button_, &QPushButton::released, this,
+          &DatabaseImageViewerWidget::ShowNextImage);
 }
 
-void DatabaseImageViewerWidget::ShowImageWithId(const image_t image_id) {
+bool DatabaseImageViewerWidget::ShowImageWithId(const image_t image_id) {
   if (model_viewer_widget_->images.count(image_id) == 0) {
-    return;
+    return false;
   }
 
-  image_id_ = image_id;
-
   const Image& image = model_viewer_widget_->images.at(image_id);
+  if (model_viewer_widget_->cameras.count(image.CameraId()) == 0) {
+    return false;
+  }
   const Camera& camera = model_viewer_widget_->cameras.at(image.CameraId());
+
+  image_id_ = image_id;
 
   image_id_item_->setText(QString::number(image_id));
   camera_id_item_->setText(QString::number(image.CameraId()));
@@ -379,6 +394,7 @@ void DatabaseImageViewerWidget::ShowImageWithId(const image_t image_id) {
 
   const std::string path = JoinPaths(*options_->image_path, image.Name());
   ReadAndShowWithKeypoints(path, keypoints, tri_mask);
+  return true;
 }
 
 void DatabaseImageViewerWidget::ResizeTable() {
@@ -401,8 +417,20 @@ void DatabaseImageViewerWidget::DeleteImage() {
       model_viewer_widget_->reconstruction->DeRegisterImage(image_id_);
     }
     model_viewer_widget_->ReloadReconstruction();
+    if(model_viewer_widget_->SelectImage(image_id_, 1)){
+      // ok
+    }else{
+      hide();
+    }
   }
-  hide();
+}
+
+void DatabaseImageViewerWidget::ShowPrevImage() {
+
+  model_viewer_widget_->SelectImage(image_id_, - 1);
+}
+void DatabaseImageViewerWidget::ShowNextImage() {
+  model_viewer_widget_->SelectImage(image_id_, 1);
 }
 
 }  // namespace colmap

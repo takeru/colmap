@@ -110,17 +110,21 @@ class DatabaseImageViewerWidget : public FeatureImageViewerWidget {
                             ModelViewerWidget* model_viewer_widget,
                             OptionManager* options);
 
-  void ShowImageWithId(const image_t image_id);
+  bool ShowImageWithId(const image_t image_id);
 
  private:
   void ResizeTable();
   void DeleteImage();
+  void ShowPrevImage();
+  void ShowNextImage();
 
   ModelViewerWidget* model_viewer_widget_;
 
   OptionManager* options_;
 
   QPushButton* delete_button_;
+  QPushButton* prev_button_;
+  QPushButton* next_button_;
 
   image_t image_id_;
 

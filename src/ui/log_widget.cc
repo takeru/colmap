@@ -50,12 +50,12 @@ LogWidget::LogWidget(QWidget* parent, const int max_num_blocks) {
 
   // Comment these lines if debugging, otherwise debug messages won't appear
   // on the console and the output is lost in the log widget when crashing
-  cout_redirector_ = new StandardOutputRedirector<char, std::char_traits<char>>(
-      std::cout, LogWidget::Update, this);
-  cerr_redirector_ = new StandardOutputRedirector<char, std::char_traits<char>>(
-      std::cerr, LogWidget::Update, this);
-  clog_redirector_ = new StandardOutputRedirector<char, std::char_traits<char>>(
-      std::clog, LogWidget::Update, this);
+  // cout_redirector_ = new StandardOutputRedirector<char, std::char_traits<char>>(
+  //     std::cout, LogWidget::Update, this);
+  // cerr_redirector_ = new StandardOutputRedirector<char, std::char_traits<char>>(
+  //     std::cerr, LogWidget::Update, this);
+  // clog_redirector_ = new StandardOutputRedirector<char, std::char_traits<char>>(
+  //     std::clog, LogWidget::Update, this);
 
   QHBoxLayout* left_button_layout = new QHBoxLayout();
 

@@ -523,6 +523,32 @@ void ModelViewerWidget::SelectObject(const int x, const int y) {
   update();
 }
 
+bool ModelViewerWidget::SelectImage(image_t image_id, const int diff) {
+  const int image_id_min = 1; // TODO
+  const int image_id_max = 1000; // TODO
+  while(true){
+    image_id = image_id + diff;
+    bool ok = ShowImageInfo(image_id);
+    // std::cout << "SelectImage image_id=" << image_id << " ok=" << ok << std::endl;
+    if (ok) {
+      selected_image_id_ = image_id;
+      selected_point3D_id_ = kInvalidPoint3DId;
+      UploadImageData(true);
+      UploadImageData();
+      UploadImageConnectionData();
+      update();
+      return true;
+    }
+    if(image_id < image_id_min){
+      return false;
+    }
+    if(image_id_max < image_id){
+      return false;
+    }
+  }
+  return false;
+}
+
 void ModelViewerWidget::SelectMoviewGrabberView(const size_t view_idx) {
   selected_movie_grabber_view_ = view_idx;
   UploadMovieGrabberData();
@@ -566,8 +592,8 @@ void ModelViewerWidget::ShowPointInfo(const point3D_t point3D_id) {
   point_viewer_widget_->Show(point3D_id);
 }
 
-void ModelViewerWidget::ShowImageInfo(const image_t image_id) {
-  image_viewer_widget_->ShowImageWithId(image_id);
+bool ModelViewerWidget::ShowImageInfo(const image_t image_id) {
+  return image_viewer_widget_->ShowImageWithId(image_id);
 }
 
 float ModelViewerWidget::PointSize() const { return point_size_; }

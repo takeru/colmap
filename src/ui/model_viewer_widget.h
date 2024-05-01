@@ -106,13 +106,14 @@ class ModelViewerWidget : public QOpenGLWidget,
   void SetModelViewMatrix(const QMatrix4x4& matrix);
 
   void SelectObject(const int x, const int y);
+  bool SelectImage(image_t image_id, const int diff);
   void SelectMoviewGrabberView(const size_t view_idx);
 
   QImage GrabImage();
   void GrabMovie();
 
   void ShowPointInfo(const point3D_t point3D_id);
-  void ShowImageInfo(const image_t image_id);
+  bool ShowImageInfo(const image_t image_id);
 
   float PointSize() const;
   float ImageSize() const;
